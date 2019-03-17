@@ -6,6 +6,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import daoImpl.CardDaoImplExist;
+import iDao.ICard;
+import model.Card;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JList;
@@ -13,11 +18,18 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
 
 public class configurationDeck extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
+	private ICard cardDaoImplExist = new CardDaoImplExist();
+	private DefaultListModel cardModel = new DefaultListModel();
 
 	/**
 	 * Launch the application.
@@ -56,6 +68,17 @@ public class configurationDeck extends JFrame {
 		JButton btnRight = new JButton("-->");
 		
 		JButton btnLoadCards = new JButton("Load Cards");
+		btnLoadCards.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Card> cards = cardDaoImplExist.getAllCards();
+				for (Card card : cards) {
+					cardModel.addElement(card.toString());
+				}
+				
+				listCard.setModel(cardModel);
+				
+			}
+		});
 		
 		JButton btnRdnDeck = new JButton("Random Deck");
 		

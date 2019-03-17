@@ -66,4 +66,18 @@ public class Card {
 	public void setValue(int value) {
 		this.value = value;
 	}
+
+	@Override
+	public String toString() {
+		return "Name: " + name + 
+				"\n Cost: " + summonCost + 
+				"\n Attack=: "  + attack + 
+				"\n Defense: " + defense +
+				"\n Value:" + value;
+	}
+
+
+	
+	
+	
 }
