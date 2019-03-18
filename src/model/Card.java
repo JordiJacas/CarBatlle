@@ -71,7 +71,7 @@ public class Card {
 	public String toString() {
 		return "Name: " + name + 
 				"\n Cost: " + summonCost + 
-				"\n Attack=: "  + attack + 
+				"\n Attack: "  + attack + 
 				"\n Defense: " + defense +
 				"\n Value:" + value;
 	}

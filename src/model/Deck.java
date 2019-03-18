@@ -9,12 +9,11 @@ public class Deck {
 	private List<Card> deck;
 	
 	public Deck(String deckName, int deckValue, List<Card> deck) {
-		super();
 		this.deckName = deckName;
 		this.deckValue = deckValue;
 		this.deck = deck;
 	}
-
+	
 	public String getDeckName() {
 		return deckName;
 	}
@@ -38,4 +37,11 @@ public class Deck {
 	public void setDeck(List<Card> deck) {
 		this.deck = deck;
 	}
+
+	@Override
+	public String toString() {
+		return "Deck [deckName=" + deckName + ", deckValue=" + deckValue + ", deck=" + deck + "]";
+	}
+	
+	
 }

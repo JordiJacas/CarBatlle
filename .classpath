@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="src/resources/org-apache-xmlrpc.jar"/>
 	<classpathentry kind="lib" path="src/resources/ws-commons-util-1.0.2.jar"/>
 	<classpathentry kind="lib" path="src/resources/xmldb.jar"/>
+	<classpathentry kind="lib" path="src/resources/gson-2.8.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

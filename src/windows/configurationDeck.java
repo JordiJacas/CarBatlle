@@ -8,28 +8,42 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import daoImpl.CardDaoImplExist;
+import daoImpl.DeckDaoImplMongoDB;
 import iDao.ICard;
+import iDao.IDeck;
 import model.Card;
+import model.Deck;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultListModel;
+import javax.swing.ListSelectionModel;
 
 public class configurationDeck extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
+	private List<Card> deck = new ArrayList<Card>();
 	private ICard cardDaoImplExist = new CardDaoImplExist();
+	private IDeck deckDaoImplMongo = new DeckDaoImplMongoDB();
 	private DefaultListModel cardModel = new DefaultListModel();
+	private DefaultListModel deckModel = new DefaultListModel();
+	private Hashtable<String, Card> hashCards = new Hashtable<String, Card>();
+	private int deckValue = 0;
+	private boolean isNew = true;
 
 	/**
 	 * Launch the application.
@@ -59,13 +73,62 @@ public class configurationDeck extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
+		
+		
 		JList listCard = new JList();
+		listCard.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		JList listDeck = new JList();
+		listDeck.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		JButton btnLeft = new JButton("<--");
+		btnLeft.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				List<String> seleccionCard = listDeck.getSelectedValuesList();
+				Iterator it = seleccionCard.iterator();
+				String element="";
+				while ( it.hasNext()) {
+					element=(String) it.next();
+					
+					deckValue = deckValue - hashCards.get(element).getValue();
+					
+					deck.remove(hashCards.get(element));
+					
+					deckModel.removeElement(element);
+					cardModel.addElement(element);
+					
+					System.out.println(deckValue);
+					
+				}
+				listCard.setModel(cardModel);
+				
+			}
+		});
 		
 		JButton btnRight = new JButton("-->");
+		btnRight.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				List<String> seleccionCard = listCard.getSelectedValuesList();
+				Iterator it = seleccionCard.iterator();
+				String element="";
+				while ( it.hasNext()) {
+					element=(String) it.next();
+					deckValue = deckValue + hashCards.get(element).getValue();
+					if(deckValue <= 20) {
+						cardModel.removeElement(element);
+						deckModel.addElement(element);
+						
+						deck.add(hashCards.get(element));
+					} else {
+						deckValue = deckValue - hashCards.get(element).getValue();
+						 JOptionPane.showMessageDialog(null,"El valor del mazo no puede ser superior ha 20.\n" +
+								 "Valor: " + deckValue);  
+					}
+					System.out.println(deckValue);
+				}
+				listDeck.setModel(deckModel);
+			}
+		});
 		
 		JButton btnLoadCards = new JButton("Load Cards");
 		btnLoadCards.addActionListener(new ActionListener() {
@@ -73,10 +136,11 @@ public class configurationDeck extends JFrame {
 				List<Card> cards = cardDaoImplExist.getAllCards();
 				for (Card card : cards) {
 					cardModel.addElement(card.toString());
+					hashCards.put(card.toString(), card);
+					deck.add(card);
 				}
 				
 				listCard.setModel(cardModel);
-				
 			}
 		});
 		
@@ -87,6 +151,32 @@ public class configurationDeck extends JFrame {
 		JLabel lblDecks = new JLabel("Decks");
 		
 		JButton btnSaveDecl = new JButton("Save Deck");
+		btnSaveDecl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+					String deckName = textField.getText();
+					Deck newDeck = new Deck(deckName, deckValue, deck);
+					
+					if(isNew && deckDaoImplMongo.getDeckByName(deckName) == null) {
+						deckDaoImplMongo.addNewDeck(newDeck);
+					} else if (!isNew && deckDaoImplMongo.getDeckByName(deckName) != null){
+						deckDaoImplMongo.updateDeck(newDeck);
+					}
+					
+					deckModel.removeAllElements();
+					listDeck.setModel(deckModel);
+					
+					List<Card> cards = cardDaoImplExist.getAllCards();
+					for (Card card : cards) {
+						cardModel.addElement(card.toString());
+						hashCards.put(card.toString(), card);
+					}
+					
+					listCard.setModel(cardModel);
+					
+					isNew = true;
+			}
+		});
 		
 		JLabel lblNameDeck = new JLabel("Name Deck");
 		
@@ -94,6 +184,25 @@ public class configurationDeck extends JFrame {
 		textField.setColumns(10);
 		
 		JButton btnLoadDeck = new JButton("Load Deck");
+		btnLoadDeck.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				isNew = false;
+				String name = textField.getText();
+				Deck currentDeck = deckDaoImplMongo.getDeckByName(name);
+				
+				if(currentDeck != null) {
+					deckValue = currentDeck.getDeckValue();
+					for (Card card : currentDeck.getDeck()) {
+						deckModel.addElement(card.toString());
+						cardModel.removeElement(card.toString());
+					}
+					
+					listCard.setModel(cardModel);
+					listDeck.setModel(deckModel);
+				}
+			}
+		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
