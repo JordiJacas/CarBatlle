@@ -216,7 +216,7 @@ public class configurationDeck extends JFrame {
 					Deck newDeck = new Deck(deckName, deckValue, deck);
 					
 					
-					if(deckName != "" || deckName != " ") {
+					if(deckName != "" || deckName != " " || deckModel.size() > 0) {
 						if(isNew && deckDaoImplMongo.getDeckByName(deckName) == null) {
 							deckDaoImplMongo.addNewDeck(newDeck);
 						} else if (!isNew && deckDaoImplMongo.getDeckByName(deckName) != null){
@@ -237,10 +237,10 @@ public class configurationDeck extends JFrame {
 						listCard.setModel(cardModel);
 						
 						isNew = true;
-						
 						deck = new ArrayList<Card>();
+						textField.setText("");
 					} else {
-						JOptionPane.showMessageDialog(null,"El nombre no puede estar vacio"); 
+						JOptionPane.showMessageDialog(null,"El nombre o la lista de cartas no pueden estar vacios"); 
 					}
 					
 					
