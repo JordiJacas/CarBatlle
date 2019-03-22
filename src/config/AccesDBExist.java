@@ -4,6 +4,7 @@ import org.exist.xmldb.XQueryService;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Database;
+import org.xmldb.api.base.XMLDBException;
 
 public class AccesDBExist {
 	
@@ -11,6 +12,7 @@ public class AccesDBExist {
     protected static String URI = "xmldb:exist://localhost:8888/exist/xmlrpc"; 
     protected static String collectionPath = "/db/Catalog"; 
     protected static String resourceName = "card_collection.xml";
+    protected static Collection col;
 	
 	public static XQueryService connectExistDb() throws Exception {
 		
@@ -27,7 +29,7 @@ public class AccesDBExist {
                         "1.0"); 
         service.setProperty("indent", "yes"); 
         
-        return service;		
+        return service;
 	}
 
 	public static String getResourceName() {

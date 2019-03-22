@@ -53,7 +53,6 @@ public class DeckDaoImplMongoDB implements IDeck{
 		}finally {
             cursor.close();
         }
-        
 
 		return currentDeck;
 	}
@@ -88,6 +87,7 @@ public class DeckDaoImplMongoDB implements IDeck{
 		
 		BasicDBObject newDocument = new BasicDBObject();
 		newDocument.append("$set", new BasicDBObject().append("deck", json));
+		newDocument.append("$set", new BasicDBObject().append("deckValue", deck.getDeckValue()));
 				
 		BasicDBObject searchQuery = new BasicDBObject().append("deckName", deck.getDeckName());
 

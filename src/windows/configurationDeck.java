@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import daoImpl.CardDaoImplExist;
@@ -24,9 +25,12 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultListModel;
@@ -44,6 +48,14 @@ public class configurationDeck extends JFrame {
 	private Hashtable<String, Card> hashCards = new Hashtable<String, Card>();
 	private int deckValue = 0;
 	private boolean isNew = true;
+	private List<Card> cards;
+	private JButton btnLoadDeck;
+	private JButton btnLeft;
+	private JButton btnRight;
+	private JButton btnRdnDeck;
+	private JButton btnSaveDecl;
+	private JButton btnLoadCards;
+	private JScrollPane scrollableList;
 
 	/**
 	 * Launch the application.
@@ -73,15 +85,14 @@ public class configurationDeck extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		
-		
 		JList listCard = new JList();
+		scrollableList = new JScrollPane(listCard);
 		listCard.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		JList listDeck = new JList();
 		listDeck.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		JButton btnLeft = new JButton("<--");
+		btnLeft = new JButton("<--");
 		btnLeft.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				List<String> seleccionCard = listDeck.getSelectedValuesList();
@@ -105,7 +116,7 @@ public class configurationDeck extends JFrame {
 			}
 		});
 		
-		JButton btnRight = new JButton("-->");
+		btnRight = new JButton("-->");
 		btnRight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				List<String> seleccionCard = listCard.getSelectedValuesList();
@@ -130,51 +141,102 @@ public class configurationDeck extends JFrame {
 			}
 		});
 		
-		JButton btnLoadCards = new JButton("Load Cards");
+		btnLoadCards = new JButton("Load Cards");
 		btnLoadCards.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<Card> cards = cardDaoImplExist.getAllCards();
+				cards = cardDaoImplExist.getAllCards();
 				for (Card card : cards) {
 					cardModel.addElement(card.toString());
 					hashCards.put(card.toString(), card);
-					deck.add(card);
 				}
 				
 				listCard.setModel(cardModel);
+				
+				btnLoadDeck.setEnabled(true);
+				btnLeft.setEnabled(true);
+				btnRight.setEnabled(true);
+				btnRdnDeck.setEnabled(true);
+				btnSaveDecl.setEnabled(true);
+				btnLoadCards.setEnabled(true);
 			}
 		});
 		
-		JButton btnRdnDeck = new JButton("Random Deck");
+		btnRdnDeck = new JButton("Random Deck");
+		btnRdnDeck.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				deckValue = 0;
+				deck = new ArrayList<Card>();
+				deckModel.removeAllElements();
+				cardModel.removeAllElements();
+				
+				for (Card card : cards) {
+					cardModel.addElement(card.toString());
+					hashCards.put(card.toString(), card);
+				}
+				
+				while(deckValue < 21) {
+					int n = new Random().nextInt(cards.size());
+					
+					Card newCard = cards.get(n);
+					deckValue = deckValue + newCard.getValue();
+					
+					if(deckValue < 21) {
+						cardModel.removeElement(newCard.toString());
+						listCard.setModel(cardModel);
+						deckModel.addElement(newCard.toString());
+						listDeck.setModel(deckModel);
+						
+						deck.add(newCard);
+					}else {
+						deckValue = deckValue - newCard.getValue();
+						break;
+					}
+				}
+				
+				System.out.println(deckValue);
+			}
+		});
 		
 		JLabel lblCards = new JLabel("Cards");
 		
 		JLabel lblDecks = new JLabel("Decks");
 		
-		JButton btnSaveDecl = new JButton("Save Deck");
+		btnSaveDecl = new JButton("Save Deck");
 		btnSaveDecl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+					
 					String deckName = textField.getText();
 					Deck newDeck = new Deck(deckName, deckValue, deck);
 					
-					if(isNew && deckDaoImplMongo.getDeckByName(deckName) == null) {
-						deckDaoImplMongo.addNewDeck(newDeck);
-					} else if (!isNew && deckDaoImplMongo.getDeckByName(deckName) != null){
-						deckDaoImplMongo.updateDeck(newDeck);
+					if(deckName != "" || deckName != " ") {
+						if(isNew && deckDaoImplMongo.getDeckByName(deckName) == null) {
+							deckDaoImplMongo.addNewDeck(newDeck);
+						} else if (!isNew && deckDaoImplMongo.getDeckByName(deckName) != null){
+							deckDaoImplMongo.updateDeck(newDeck);
+						} else if(isNew && deckDaoImplMongo.getDeckByName(deckName) != null) {
+							JOptionPane.showMessageDialog(null,"El nombre " + deckName + "ya existe"); 
+						}
+						
+						deckModel.removeAllElements();
+						listDeck.setModel(deckModel);
+						
+						List<Card> cards = cardDaoImplExist.getAllCards();
+						for (Card card : cards) {
+							cardModel.addElement(card.toString());
+							hashCards.put(card.toString(), card);
+						}
+						
+						listCard.setModel(cardModel);
+						
+						isNew = true;
+						
+						deck = new ArrayList<Card>();
+					} else {
+						JOptionPane.showMessageDialog(null,"El nombre no puede estar vacio"); 
 					}
 					
-					deckModel.removeAllElements();
-					listDeck.setModel(deckModel);
 					
-					List<Card> cards = cardDaoImplExist.getAllCards();
-					for (Card card : cards) {
-						cardModel.addElement(card.toString());
-						hashCards.put(card.toString(), card);
-					}
-					
-					listCard.setModel(cardModel);
-					
-					isNew = true;
 			}
 		});
 		
@@ -183,11 +245,13 @@ public class configurationDeck extends JFrame {
 		textField = new JTextField();
 		textField.setColumns(10);
 		
-		JButton btnLoadDeck = new JButton("Load Deck");
+		btnLoadDeck = new JButton("Load Deck");
 		btnLoadDeck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
+				deck = new ArrayList<Card>();
 				isNew = false;
+				deckModel.removeAllElements();
 				String name = textField.getText();
 				Deck currentDeck = deckDaoImplMongo.getDeckByName(name);
 				
@@ -196,13 +260,23 @@ public class configurationDeck extends JFrame {
 					for (Card card : currentDeck.getDeck()) {
 						deckModel.addElement(card.toString());
 						cardModel.removeElement(card.toString());
+						deck.add(card);
 					}
 					
 					listCard.setModel(cardModel);
 					listDeck.setModel(deckModel);
+				}else {
+					JOptionPane.showMessageDialog(null,"El mazo no existe");
 				}
 			}
 		});
+		
+		btnLoadDeck.setEnabled(false);
+		btnLeft.setEnabled(false);
+		btnRight.setEnabled(false);
+		btnRdnDeck.setEnabled(false);
+		btnSaveDecl.setEnabled(false);
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
