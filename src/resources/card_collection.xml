@@ -1,0 +1,142 @@
+<cards>
+  <card id="1">
+    <name>Quimera</name>
+    <summonCost>3</summonCost>
+    <attack>5</attack>
+    <defense>3</defense>
+    <value>4</value>
+  </card>
+  <card id="2">
+    <name>Fenix</name>
+    <summonCost>5</summonCost>
+    <attack>4</attack>
+    <defense>9</defense>
+    <value>7</value>
+  </card>
+  <card id="3">
+    <name>Dragon dorado</name>
+    <summonCost>8</summonCost>
+    <attack>10</attack>
+    <defense>9</defense>
+    <value>9</value>
+  </card>
+  <card id="4">
+    <name>Grigo</name>
+    <summonCost>3</summonCost>
+    <attack>5</attack>
+    <defense>5</defense>
+    <value>5</value>
+  </card>
+  <card id="5">
+    <name>Licantropo</name>
+    <summonCost>2</summonCost>
+    <attack>3</attack>
+    <defense>1</defense>
+    <value>2</value>
+  </card>
+  <card id="6">
+    <name>Pegaso</name>
+    <summonCost>2</summonCost>
+    <attack>3</attack>
+    <defense>6</defense>
+    <value>5</value>
+  </card>
+  <card id="7">
+    <name>Cerbero</name>
+    <summonCost>6</summonCost>
+    <attack>7</attack>
+    <defense>5</defense>
+    <value>6</value>
+  </card>
+  <card id="8">
+    <name>Dragon plateado</name>
+    <summonCost>6</summonCost>
+    <attack>4</attack>
+    <defense>9</defense>
+    <value>6</value>
+  </card>
+  <card id="9">
+    <name>Arcangel</name>
+    <summonCost>6</summonCost>
+    <attack>5</attack>
+    <defense>5</defense>
+    <value>5</value>
+  </card>
+  <card id="10">
+    <name>Poseidon</name>
+    <summonCost>8</summonCost>
+    <attack>9</attack>
+    <defense>7</defense>
+    <value>8</value>
+  </card>
+  <card id="11">
+    <name>Medusa</name>
+    <summonCost>2</summonCost>
+    <attack>4</attack>
+    <defense>3</defense>
+    <value>3</value>
+  </card>
+  <card id="12">
+    <name>Dragon</name>
+    <summonCost>3</summonCost>
+    <attack>3</attack>
+    <defense>4</defense>
+    <value>2</value>
+  </card>
+  <card id="13">
+    <name>Hades</name>
+    <summonCost>6</summonCost>
+    <attack>9</attack>
+    <defense>6</defense>
+    <value>7</value>
+  </card>
+  <card id="14">
+    <name>Zeus</name>
+    <summonCost>10</summonCost>
+    <attack>10</attack>
+    <defense>10</defense>
+    <value>10</value>
+  </card>
+  <card id="15">
+    <name>Hipocampo</name>
+    <summonCost>1</summonCost>
+    <attack>1</attack>
+    <defense>1</defense>
+    <value>1</value>
+  </card>
+  <card id="16">
+    <name>Elfo</name>
+    <summonCost>2</summonCost>
+    <attack>3</attack>
+    <defense>4</defense>
+    <value>3</value>
+  </card>
+  <card id="17">
+    <name>Unicornio</name>
+    <summonCost>2</summonCost>
+    <attack>4</attack>
+    <defense>8</defense>
+    <value>5</value>
+  </card>
+  <card id="18">
+    <name>Leviaton</name>
+    <summonCost>5</summonCost>
+    <attack>8</attack>
+    <defense>4</defense>
+    <value>6</value>
+  </card>
+  <card id="19">
+    <name>Ninfa</name>
+    <summonCost>1</summonCost>
+    <attack>1</attack>
+    <defense>1</defense>
+    <value>1</value>
+  </card>
+  <card id="20">
+    <name>Sombra</name>
+    <summonCost>6</summonCost>
+    <attack>4</attack>
+    <defense>9</defense>
+    <value>6</value>
+  </card>
+</cards>

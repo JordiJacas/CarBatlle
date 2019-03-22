@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListModel;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -103,7 +104,7 @@ public class configurationDeck extends JFrame {
 					
 					deckValue = deckValue - hashCards.get(element).getValue();
 					
-					deck.remove(hashCards.get(element));
+					//deck.remove(hashCards.get(element));
 					
 					deckModel.removeElement(element);
 					cardModel.addElement(element);
@@ -129,7 +130,7 @@ public class configurationDeck extends JFrame {
 						cardModel.removeElement(element);
 						deckModel.addElement(element);
 						
-						deck.add(hashCards.get(element));
+						//deck.add(hashCards.get(element));
 					} else {
 						deckValue = deckValue - hashCards.get(element).getValue();
 						 JOptionPane.showMessageDialog(null,"El valor del mazo no puede ser superior ha 20.\n" +
@@ -207,7 +208,13 @@ public class configurationDeck extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 					
 					String deckName = textField.getText();
+					
+					for(int x = 0; x < deckModel.getSize(); x++) {
+						deck.add(hashCards.get(deckModel.get(x)));
+					}
+					
 					Deck newDeck = new Deck(deckName, deckValue, deck);
+					
 					
 					if(deckName != "" || deckName != " ") {
 						if(isNew && deckDaoImplMongo.getDeckByName(deckName) == null) {
@@ -224,7 +231,7 @@ public class configurationDeck extends JFrame {
 						List<Card> cards = cardDaoImplExist.getAllCards();
 						for (Card card : cards) {
 							cardModel.addElement(card.toString());
-							hashCards.put(card.toString(), card);
+							//hashCards.put(card.toString(), card);
 						}
 						
 						listCard.setModel(cardModel);
@@ -260,7 +267,7 @@ public class configurationDeck extends JFrame {
 					for (Card card : currentDeck.getDeck()) {
 						deckModel.addElement(card.toString());
 						cardModel.removeElement(card.toString());
-						deck.add(card);
+						//deck.add(card);
 					}
 					
 					listCard.setModel(cardModel);

@@ -37,8 +37,6 @@ public class DeckDaoImplMongoDB implements IDeck{
         FindIterable<Document> fi = collection.find(where);
         MongoCursor<Document> cursor = fi.iterator();
         
-        
-        
         try {
            Document newDocument =  cursor.next();
            
@@ -85,13 +83,16 @@ public class DeckDaoImplMongoDB implements IDeck{
 		MongoCollection<Document> collection = AccesDBMongo.connectMongoDb();
 		String json = new Gson().toJson(deck.getDeck(), type);
 		
-		BasicDBObject newDocument = new BasicDBObject();
-		newDocument.append("$set", new BasicDBObject().append("deck", json));
-		newDocument.append("$set", new BasicDBObject().append("deckValue", deck.getDeckValue()));
+		BasicDBObject newDocumentDeck = new BasicDBObject();
+		newDocumentDeck.append("$set", new BasicDBObject().append("deck", json));
+		
+		BasicDBObject newDocumentValue = new BasicDBObject();
+		newDocumentValue.append("$set", new BasicDBObject().append("deckValue", deck.getDeckValue()));
 				
 		BasicDBObject searchQuery = new BasicDBObject().append("deckName", deck.getDeckName());
 
-		collection.updateOne(searchQuery, newDocument);
+		collection.updateOne(searchQuery, newDocumentDeck);
+		collection.updateOne(searchQuery, newDocumentValue);
 		
 	}
 
