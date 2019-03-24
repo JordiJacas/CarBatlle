@@ -9,7 +9,7 @@ import org.xmldb.api.base.XMLDBException;
 public class AccesDBExist {
 	
     protected static String DRIVER = "org.exist.xmldb.DatabaseImpl"; 
-    protected static String URI = "xmldb:exist://localhost:8888/exist/xmlrpc"; 
+    protected static String URI = "xmldb:exist://localhost:8080/exist/xmlrpc"; 
     protected static String collectionPath = "/db/Catalog"; 
     protected static String resourceName = "card_collection.xml";
     protected static Collection col;

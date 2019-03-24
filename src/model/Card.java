@@ -69,23 +69,6 @@ public class Card {
 
 	@Override
 	public String toString() {
-		return name + summonCost + attack + defense + value;
-	}
-	
-    public int compareTo(Card card) {
-        if (this.value < card.value) {
-            return -1;
-        }
-        if (this.value > card.value) {
-            return 1;
-        }
-        return 0;
-    }
-    
-    
-
-
-	
-	
-	
+		return name + "-" + summonCost + "-" + attack + "-" + defense + "-" + value;
+	} 	
 }

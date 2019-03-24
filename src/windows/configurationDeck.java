@@ -104,8 +104,6 @@ public class configurationDeck extends JFrame {
 					
 					deckValue = deckValue - hashCards.get(element).getValue();
 					
-					//deck.remove(hashCards.get(element));
-					
 					deckModel.removeElement(element);
 					cardModel.addElement(element);
 					
@@ -130,7 +128,6 @@ public class configurationDeck extends JFrame {
 						cardModel.removeElement(element);
 						deckModel.addElement(element);
 						
-						//deck.add(hashCards.get(element));
 					} else {
 						deckValue = deckValue - hashCards.get(element).getValue();
 						 JOptionPane.showMessageDialog(null,"El valor del mazo no puede ser superior ha 20.\n" +
@@ -188,7 +185,7 @@ public class configurationDeck extends JFrame {
 						deckModel.addElement(newCard.toString());
 						listDeck.setModel(deckModel);
 						
-						deck.add(newCard);
+						
 					}else {
 						deckValue = deckValue - newCard.getValue();
 						break;
@@ -208,6 +205,7 @@ public class configurationDeck extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 					
 					String deckName = textField.getText();
+					System.out.println("Hello" + deckName);
 					
 					for(int x = 0; x < deckModel.getSize(); x++) {
 						deck.add(hashCards.get(deckModel.get(x)));
@@ -216,22 +214,24 @@ public class configurationDeck extends JFrame {
 					Deck newDeck = new Deck(deckName, deckValue, deck);
 					
 					
-					if(deckName != "" || deckName != " " || deckModel.size() > 0) {
+					if(!deckName.isEmpty() && !deckModel.isEmpty()) {
 						if(isNew && deckDaoImplMongo.getDeckByName(deckName) == null) {
 							deckDaoImplMongo.addNewDeck(newDeck);
+							System.out.println("allo");
 						} else if (!isNew && deckDaoImplMongo.getDeckByName(deckName) != null){
 							deckDaoImplMongo.updateDeck(newDeck);
+							System.out.println("Jello");
 						} else if(isNew && deckDaoImplMongo.getDeckByName(deckName) != null) {
 							JOptionPane.showMessageDialog(null,"El nombre " + deckName + "ya existe"); 
 						}
 						
 						deckModel.removeAllElements();
+						cardModel.removeAllElements();
 						listDeck.setModel(deckModel);
 						
 						List<Card> cards = cardDaoImplExist.getAllCards();
 						for (Card card : cards) {
 							cardModel.addElement(card.toString());
-							//hashCards.put(card.toString(), card);
 						}
 						
 						listCard.setModel(cardModel);
@@ -239,6 +239,8 @@ public class configurationDeck extends JFrame {
 						isNew = true;
 						deck = new ArrayList<Card>();
 						textField.setText("");
+						deckValue = 0;
+						
 					} else {
 						JOptionPane.showMessageDialog(null,"El nombre o la lista de cartas no pueden estar vacios"); 
 					}
@@ -259,15 +261,20 @@ public class configurationDeck extends JFrame {
 				deck = new ArrayList<Card>();
 				isNew = false;
 				deckModel.removeAllElements();
+				cardModel.removeAllElements();
 				String name = textField.getText();
 				Deck currentDeck = deckDaoImplMongo.getDeckByName(name);
+				
+				List<Card> cards = cardDaoImplExist.getAllCards();
+				for (Card card : cards) {
+					cardModel.addElement(card.toString());
+				}
 				
 				if(currentDeck != null) {
 					deckValue = currentDeck.getDeckValue();
 					for (Card card : currentDeck.getDeck()) {
 						deckModel.addElement(card.toString());
 						cardModel.removeElement(card.toString());
-						//deck.add(card);
 					}
 					
 					listCard.setModel(cardModel);
